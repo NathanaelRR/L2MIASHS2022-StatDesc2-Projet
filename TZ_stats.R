@@ -6,6 +6,11 @@ library(parallel)
 library(dplyr)
 library(ggplot2)
 library(xgboost)
+library(splitTools)
+library(ranger)
+library(rpart)
+library(rpart.plot)
+library(ROSE)
 
 
 #Configuration
@@ -14,7 +19,7 @@ setup_disk.frame(workers = nCores)
 options(future.globals.maxSize = Inf)
 
 
-#Morceler les données
+#CHARGEMENT DES DONNEES
 df <- csv_to_disk.frame(
   file.path("data", "train.csv"), 
   outdir = file.path("data", "train.df"),
@@ -25,31 +30,27 @@ df[1,]
 
 set.seed(777)
 
-#Mettre 60% du jeu de donnée dans train
-
-library(splitTools)
-library(ranger)
+#REPARTITION DES JEUX DE DONNEES/MORCELER LES DONNEES
 
 temp <- partition(is.atomic(temp), p = c(train = 0.6, valid = 0.2, test = 0.2))
 
 temp <- collect(sample_frac(df, 1))
 
-
-
-          #Exploration des données--------
-
-
 head(df)
-df$amount <- as.integer(df$amount)
-df$oldbalanceOrg <- as.integer(df$oldbalanceOrg)
-df$oldbalanceDest <- as.integer(df$oldbalanceDest)
-df$newbalanceDest <- as.integer(df$newbalanceDest)
-df$isFraud <- as.factor(df$isFraud)
-df$isFlaggedFraud <- as.factor(df$isFlaggedFraud)
-df$type<-as.factor(df$type)
-df$newbalanceDest <- as.integer(df$newbalanceDest)
-df$newbalanceOrig <- as.integer(df$newbalanceOrig)
-df$oldbalanceDest <- as.integer(df$oldbalanceDest)
+
+#ARRANGEMENT DES DONNEES
+load("train.csv")
+train <- temp
+train <- select(train,-1,-5,-8,-12)
+train$amount <- as.integer(train$amount)
+train$oldbalanceOrg <- as.integer(train$oldbalanceOrg)
+train$oldbalanceDest <- as.integer(train$oldbalanceDest)
+train$newbalanceDest <- as.integer(train$newbalanceDest)
+train$isFraud <- as.factor(train$isFraud)
+train$type<-as.factor(train$type)
+train$newbalanceDest <- as.integer(train$newbalanceDest)
+train$newbalanceOrig <- as.integer(train$newbalanceOrig)
+train$oldbalanceDest <- as.integer(train$oldbalanceDest)
 
 
 

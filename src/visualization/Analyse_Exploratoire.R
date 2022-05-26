@@ -16,7 +16,11 @@ options(future.globals.maxSize = Inf)
 load("train.csv")
 set.seed(777)
 
+<<<<<<< HEAD
          #Exploration des donnees--------
+=======
+#Exploration des donnees--------
+>>>>>>> 547a4deb3e74def35e8da42f9aadd8cd08a7f988
 
 
 head(train)
@@ -69,7 +73,11 @@ sum(is.na(train))
 plot(train$isFraud, 
      main = "Taux de fraudes et non-fraudes", 
      sub = "0=Non-Fraude   1=Fraude")
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 547a4deb3e74def35e8da42f9aadd8cd08a7f988
 #Le jeu de données est déséquilibré, il faudra donc utilisé des modèles adaptés (ex: arbres de décision, xgboost...)
 
 #--------------------------------------#
